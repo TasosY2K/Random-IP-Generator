@@ -10,6 +10,16 @@ var rangeEnd4 = 255;
 
 var ipAmount = 1;
 
+function alertBox(type, text) {
+	if (type === true) {
+		document.getElementById('log').innerHTML = text;
+		document.getElementById('log').className = "alert-success";
+	} else if (type === false) {
+		document.getElementById('log').innerHTML = text;
+		document.getElementById('log').className = "alert-danger";
+	}
+}
+
 function rangeSet() {
 	rangeStart1 = document.getElementById('rangeStart1').value;
 	rangeStart2 = document.getElementById('rangeStart2').value;
@@ -28,7 +38,7 @@ function amountSet() {
 
 function ipGen() {
 
-	if (ipAmount > 256) return(document.getElementById('log').innerHTML = "You cannot generate more than 256 IP's at a time");
+	if (ipAmount > 256) return(alertBox(false, "You cannot generate more than 256 IP's at a time"));
 
 	document.getElementById('ipOut').innerHTML = '';
 
@@ -39,18 +49,19 @@ function ipGen() {
 		var out4 = Math.floor(Math.random() * (parseFloat(rangeEnd4) - parseFloat(rangeStart4) + 1)) + parseFloat(rangeStart4);
 		document.getElementById('ipOut').innerHTML += out1 + "." + out2 + "." + out3 + "." + out4 + "&#10;";
 	}
-	document.getElementById('log').innerHTML = ipAmount + " IP's generated successfuly";
+	alertBox(true, ipAmount + " IP's generated successfuly");
 }
 
 function autoCopy() {
 	var text = document.getElementById("ipOut");
 	text.select();
 	document.execCommand("copy");
-	document.getElementById('log').innerHTML = ipAmount + " IP's copied to clipboard";
+	alertBox(true, ipAmount + " IP's copied to clipboard")
 }
 
 function downloadText() {
 	var text = document.getElementById("ipOut").value;
+	if (!text) return(alertBox(false, "There are no generated IP's to download"));
   text = text.replace(/\n/g, "\r\n");
   var blob = new Blob([text], { type: "text/plain"});
   var anchor = document.createElement("a");
@@ -61,7 +72,7 @@ function downloadText() {
   document.body.appendChild(anchor);
   anchor.click();
   document.body.removeChild(anchor);
-	document.getElementById('log').innerHTML = ipAmount + " IP's downloaded successfuly";
+	alertBox(true, ipAmount + " IP's downloaded successfuly")
 }
 
 var EventUtil = {
